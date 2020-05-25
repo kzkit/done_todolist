@@ -1,6 +1,7 @@
 import 'package:done_todolist/model/task.dart';
+import 'package:flutter/material.dart';
 
-class TaskData {
+class TaskData with ChangeNotifier {
   List<Task> _tasks = [
     Task(
       taskName: 'Pay bills',
@@ -14,7 +15,21 @@ class TaskData {
     ),
   ];
 
-  List<Task> get task {
-    return [..._tasks];
+  List<Task> get getIncompleteTask {
+    return [..._tasks.where((element) => element.complete == false)];
+  }
+
+  List<Task> get getCompleteTask {
+    return [..._tasks.where((element) => element.complete == true)];
+  }
+
+  void doneChecker(bool taskDone, int index) {
+    //identified problem... need an unique ID
+    print(index);
+    print(taskDone);
+    if (index != null) {
+      _tasks[index].complete = taskDone;
+      notifyListeners();
+    }
   }
 }
