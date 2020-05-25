@@ -1,7 +1,6 @@
+import 'package:done_todolist/widget/task_list.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
-
-import './provider/task_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +31,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,8 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 30,
-            vertical: 70,
+            horizontal: 20,
+            vertical: 50,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,56 +67,20 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Text(
                 'Incomplete',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              Container(
-                height: 250,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ListView.builder(
-                      itemCount: TaskData().task.length,
-                      itemBuilder: (context, index) {
-                        return CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: Text('test'),
-                            value: _isChecked,
-                            onChanged: (value) {
-                              setState(() {
-                                _isChecked = value;
-                              });
-                            });
-                      }),
-                ),
-              ),
+              TaskList(),
               Text(
                 'Completed',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              Container(
-                height: 250,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ListView.builder(
-                      itemCount: TaskData().task.length,
-                      itemBuilder: (context, index) {
-                        return CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: Text('test'),
-                            value: _isChecked,
-                            onChanged: (value) {
-                              setState(() {
-                                _isChecked = value;
-                              });
-                            });
-                      }),
-                ),
-              ),
+              TaskList(),
             ],
           ),
         ),
       ]),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 200),
+        padding: const EdgeInsets.only(top: 190, right: 20),
         child: FloatingActionButton.extended(
           onPressed: () {
             //...add task for fab
@@ -126,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
           tooltip: 'Add task',
           label: Text('Add Task'),
           icon: Icon(Icons.add),
-          elevation: 5,
+          elevation: 7,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
