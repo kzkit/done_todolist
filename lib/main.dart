@@ -13,10 +13,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        textTheme: TextTheme(),
+        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Color.fromRGBO(102, 153, 255, 1),
+          backgroundColor: Color.fromRGBO(93, 120, 216, 1),
           foregroundColor: Colors.white,
         ),
       ),
@@ -42,8 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
                 colors: [
-                  Color.fromRGBO(102, 153, 255, 1),
-                  Color.fromRGBO(255, 255, 255, 1),
+                  Color.fromRGBO(93, 120, 216, 1),
+                  Color.fromRGBO(230, 244, 241, 1),
                 ]),
           ),
         ),
@@ -56,10 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text(
-                formatDate(DateTime.now(), [dd, '-', mm]),
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  formatDate(DateTime.now(), [dd, '-', mm, '-', yyyy]),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
+                ),
               ),
               Text('5 incomplete, 5 completed'),
               Divider(
@@ -70,17 +74,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               TaskList(),
-              Text(
-                'Completed',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Completed',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    FlatButton.icon(
+                        onPressed: () {},
+                        icon: Icon(Icons.clear),
+                        label: Text('Clear All'))
+                  ]),
               TaskList(),
             ],
           ),
         ),
       ]),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 190, right: 20),
+        padding: const EdgeInsets.only(bottom: 40),
         child: FloatingActionButton.extended(
           onPressed: () {
             //...add task for fab
@@ -91,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           elevation: 7,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
