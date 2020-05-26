@@ -1,6 +1,7 @@
 import 'package:done_todolist/widget/fab.dart';
 import 'package:provider/provider.dart';
 import '../provider/task_data.dart';
+import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 
@@ -10,6 +11,13 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  @override
+  void dispose() {
+    //close the DB when state is disposed
+    Hive.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskData>(builder: (context, taskData, child) {
@@ -44,7 +52,8 @@ class _TaskPageState extends State<TaskPage> {
                     textAlign: TextAlign.start,
                   ),
                 ),
-                Text('5 incomplete, 5 completed'),
+                Text(
+                    '${taskData.getIncompleteTask.length} incomplete, ${taskData.getCompleteTask.length}  completed'),
                 Divider(
                   thickness: 2,
                 ),
@@ -62,15 +71,23 @@ class _TaskPageState extends State<TaskPage> {
                       itemCount: taskData.getIncompleteTask.length,
                       itemBuilder: (context, index) {
                         return CheckboxListTile(
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title:
-                              Text(taskData.getIncompleteTask[index].taskName),
-                          subtitle: Text(taskData
-                              .getIncompleteTask[index].taskSubDescription),
-                          value: taskData.getIncompleteTask[index].complete,
-                          onChanged: (value) =>
-                              taskData.doneChecker(value, index),
-                        );
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(
+                                taskData.getIncompleteTask[index].taskName),
+                            //checking if subtitle has a value, if no don't display.
+                            subtitle: taskData.getIncompleteTask[index]
+                                        .taskSubDescription !=
+                                    ''
+                                ? Text(taskData.getIncompleteTask[index]
+                                    .taskSubDescription)
+                                : null,
+                            value: taskData.getIncompleteTask[index].complete,
+                            onChanged: (value) {
+                              taskData.doneChecker(
+                                value,
+                                taskData.getIncompleteTask[index].id,
+                              );
+                            });
                       }),
                 )),
                 Row(
@@ -81,10 +98,13 @@ class _TaskPageState extends State<TaskPage> {
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      FlatButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.clear),
-                          label: Text('Clear All'))
+                      if (taskData.getCompleteTask.length != 0)
+                        FlatButton.icon(
+                            onPressed: () {
+                              taskData.deleteTask();
+                            },
+                            icon: Icon(Icons.clear),
+                            label: Text('Clear')),
                     ]),
                 Expanded(
                   //If there is no AppBar, ListView will auto add padding at the top
@@ -97,13 +117,26 @@ class _TaskPageState extends State<TaskPage> {
                         itemBuilder: (context, index) {
                           return CheckboxListTile(
                             controlAffinity: ListTileControlAffinity.leading,
-                            title:
-                                Text(taskData.getCompleteTask[index].taskName),
-                            subtitle: Text(taskData
-                                .getCompleteTask[index].taskSubDescription),
+                            title: Text(
+                              taskData.getCompleteTask[index].taskName,
+                              style: TextStyle(
+                                  decoration: TextDecoration.lineThrough),
+                            ),
+                            //checking if subtitle has a value, if no don't display.
+                            subtitle: taskData.getCompleteTask[index]
+                                        .taskSubDescription !=
+                                    ''
+                                ? Text(
+                                    taskData.getCompleteTask[index]
+                                        .taskSubDescription,
+                                    style: TextStyle(
+                                        decoration: TextDecoration.lineThrough))
+                                : null,
                             value: taskData.getCompleteTask[index].complete,
-                            onChanged: (value) =>
-                                taskData.doneChecker(value, index),
+                            onChanged: (value) => taskData.doneChecker(
+                              value,
+                              taskData.getCompleteTask[index].id,
+                            ),
                           );
                         }),
                   ),

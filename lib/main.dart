@@ -16,12 +16,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //this is necessary to build the list from DB in the beginning of the app
+    var runner = Provider.of<TaskData>(context, listen: false);
+    runner.getFromDB();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         textTheme: TextTheme(),
-        primarySwatch: Colors.blue,
+        primaryColor: Color.fromRGBO(93, 120, 216, 1),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Color.fromRGBO(93, 120, 216, 1),
