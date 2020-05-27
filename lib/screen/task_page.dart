@@ -20,6 +20,9 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    //this is necessary to build the list from DB in the beginning of the app
+    var runner = Provider.of<TaskData>(context, listen: false);
+    runner.getFromDB();
     return Consumer<TaskData>(builder: (context, taskData, child) {
       return Scaffold(
         backgroundColor: Colors.transparent,

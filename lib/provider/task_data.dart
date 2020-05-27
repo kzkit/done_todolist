@@ -18,17 +18,11 @@ class TaskData with ChangeNotifier {
   void getFromDB() async {
     await Hive.initFlutter();
     var taskBox = await Hive.openBox('taskBox');
-    print(taskBox.length);
     for (int i = 0; i < taskBox.length; i++) {
-      //clear the list to avoid duplication
-      if (_tasks.length <= 0) {
+      if (_tasks.length > 0) {
         _tasks = [];
       }
       var taskItem = taskBox.getAt(i);
-      print(_tasks.length);
-      //some reason this is duplicating. check
-      var abc = _tasks.any((element) => element.id != taskItem['id']);
-      print(abc);
       if (_tasks.any((element) => element.id != taskItem['id']) ||
           _tasks.length == 0) {
         _tasks.add(Task(
@@ -39,7 +33,6 @@ class TaskData with ChangeNotifier {
         ));
       }
     }
-
     notifyListeners();
   }
 
