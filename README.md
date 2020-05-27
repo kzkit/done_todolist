@@ -1,4 +1,4 @@
-# done_todolist
+# Space - Minima(to do)list.
 
 A minimalist todo list app made with [Flutter](https://www.flutter.dev) and [Hive](https://docs.hivedb.dev/#/)
 
