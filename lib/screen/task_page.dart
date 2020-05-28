@@ -13,7 +13,7 @@ class TaskPage extends StatefulWidget {
 class _TaskPageState extends State<TaskPage> {
   @override
   void dispose() {
-    //close the DB when state is disposed
+    //close the box when state is disposed
     Hive.close();
     super.dispose();
   }
@@ -21,8 +21,11 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     //this is necessary to build the list from DB in the beginning of the app
+
     var runner = Provider.of<TaskData>(context, listen: false);
+    // as Hive does not provide queries capabilities 😪
     runner.getFromDB();
+
     return Consumer<TaskData>(builder: (context, taskData, child) {
       return Scaffold(
         backgroundColor: Colors.transparent,

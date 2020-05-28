@@ -1,12 +1,13 @@
 import 'package:done_todolist/model/task.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskData with ChangeNotifier {
   List<Task> _tasks = [];
 
+  //Provider is still necessary for this project because we have to query the lists for
+  //completion status... Hive does not support queries atm of development.
   List<Task> get getIncompleteTask {
     return [..._tasks.where((element) => element.complete == false)];
   }
@@ -16,22 +17,18 @@ class TaskData with ChangeNotifier {
   }
 
   void getFromDB() async {
-    await Hive.initFlutter();
     var taskBox = await Hive.openBox('taskBox');
+    print(taskBox.length);
+    //clear the _tasks to avoid contamination
+    _tasks = [];
     for (int i = 0; i < taskBox.length; i++) {
-      if (_tasks.length > 0) {
-        _tasks = [];
-      }
       var taskItem = taskBox.getAt(i);
-      if (_tasks.any((element) => element.id != taskItem['id']) ||
-          _tasks.length == 0) {
-        _tasks.add(Task(
-          id: taskItem['id'],
-          taskName: taskItem['taskName'],
-          taskSubDescription: taskItem['taskSubDescription'],
-          complete: taskItem['complete'],
-        ));
-      }
+      _tasks.add(Task(
+        id: taskItem['id'],
+        taskName: taskItem['taskName'],
+        taskSubDescription: taskItem['taskSubDescription'],
+        complete: taskItem['complete'],
+      ));
     }
     notifyListeners();
   }
@@ -71,6 +68,7 @@ class TaskData with ChangeNotifier {
       'taskSubDescription': newTask.taskSubDescription,
       'complete': newTask.complete,
     });
+    print(taskBox.length);
     notifyListeners();
   }
 
