@@ -24,8 +24,7 @@ class _FABState extends State<FAB> {
   Widget build(BuildContext context) {
     final taskData = Provider.of<TaskData>(context, listen: false);
     return Padding(
-      padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+      padding: EdgeInsets.only(bottom: 20),
       child: FloatingActionButton.extended(
         onPressed: () {
           showModalBottomSheet(
@@ -37,10 +36,10 @@ class _FABState extends State<FAB> {
             builder: (context) => Padding(
               padding: EdgeInsets.only(
                 //necessary to move the modalsheet up according to keyboard.
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 40,
                 left: MediaQuery.of(context).viewInsets.left + 20,
                 right: MediaQuery.of(context).viewInsets.right + 20,
-                top: 15,
+                top: 25,
               ),
               child: Form(
                 key: _formKey,

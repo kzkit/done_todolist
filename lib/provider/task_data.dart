@@ -18,7 +18,6 @@ class TaskData with ChangeNotifier {
 
   void getFromDB() async {
     var taskBox = await Hive.openBox('taskBox');
-    print(taskBox.length);
     //clear the _tasks to avoid contamination
     _tasks = [];
     for (int i = 0; i < taskBox.length; i++) {
@@ -35,10 +34,12 @@ class TaskData with ChangeNotifier {
 
   void doneChecker(bool taskDone, String id) async {
     if (id != null || id != '') {
+      //assign the bool to the task
       _tasks.firstWhere((element) => element.id == id).complete = taskDone;
       var taskBox = await Hive.openBox('taskBox');
       var taskItem = taskBox.get(id);
       taskItem['complete'] = taskDone;
+      //add back to the DB
       taskBox.put(id, {
         'id': taskItem['id'],
         'taskName': taskItem['taskName'],
